@@ -27,7 +27,7 @@ class PositionalEncoding(nn.Module):
     
 class TransformerEncoderV1(nn.Module):
 
-    def __init__(self, inputdim, device, dmodel=400, layers=4, drop=0.0):
+    def __init__(self, inputdim, device, dmodel=256, layers=4, drop=0.0):
         super(TransformerEncoderV1, self).__init__()
         self.device=device
         self.pos_embed_static = PositionalEncoding(d_model=dmodel)
@@ -46,7 +46,7 @@ class TransformerEncoderV1(nn.Module):
     
 class TransformerDecoderV1(nn.Module):
 
-    def __init__(self, inputdim, device, dmodel=400,layers=4, drop=0.0):
+    def __init__(self, inputdim, device, dmodel=256,layers=4, drop=0.0):
         super(TransformerDecoderV1, self).__init__()
         self.device=device
         self.pos_embed = PositionalEncoding(d_model=dmodel)
@@ -72,15 +72,10 @@ class TransformerDecoderV1(nn.Module):
     
 class TransformerV1(nn.Module):
 
-    def __init__(self, Encoder, Decoder , outputdim ,dmodel=400):
+    def __init__(self, Encoder, Decoder , outputdim ,dmodel=256):
         super(TransformerV1, self).__init__()
         self.encode = Encoder
         self.decode = Decoder
-#         self.FC = nn.Sequential(nn.Linear(dmodel,int(dmodel/4)),
-#                                 nn.LayerNorm(int(dmodel/4)),
-#                                 nn.ReLU(),
-#                                 nn.Linear(int(dmodel/4), outputdim,),
-#                                 nn.Sigmoid())
         self.FC = nn.Sequential(nn.Linear(dmodel, outputdim,bias=True),nn.Sigmoid())
 
     def forward(self, src, target):
